@@ -145,3 +145,43 @@ p {
 
   border-radius: 7px;
 }
+
+/* sim loader */
+.input-rows{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  padding-left: 50px;
+  padding-right: 50px;
+  padding-bottom: 50px;
+
+}
+
+.param{
+  background-color: #E1E4E8;
+  border-radius: 5px;
+  padding: 10px;
+  text-align: center;
+}
+
+.setup-row{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  gap: 50px;
+  padding-top: 40px;
+}
+
+.button-container{
+  align-self: center;
+}
+
+.start-button{
+ text-decoration: none;
+ color: #ffffff;
+ background-color: #2563EB;
+ font-weight: 700;
+ padding: 30px;
+ border-radius: 7px;
+}

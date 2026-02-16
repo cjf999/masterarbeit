@@ -9,12 +9,14 @@ import App from './App.tsx'
 import NotFound from './pages/NotFound.tsx'
 import Compare from './pages/Compare.tsx'
 import Result from './pages/Result.tsx'
+import Setup from './pages/Setup.tsx'
 
 const router = createBrowserRouter([
   {path: "/", element: <App />}, //default route
   {path: "*", element: <NotFound />}, //wenn nicht auflösbar, dann gehe hier hin (404)
   {path: "/compare", element: <Compare />},
   {path: "/result", element: <Result />},
+  {path: "/setup", element: <Setup />},
 ])
 
 createRoot(document.getElementById('root')!).render(
