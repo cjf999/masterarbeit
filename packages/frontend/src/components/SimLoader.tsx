@@ -49,7 +49,7 @@ export default function SimLoader(){
     return(
         <>
             <Navbar /> 
-            <h1>SimLoader-Component</h1>
+            <h2>SimLoader-Component</h2>
             <form onSubmit={handleSubmit} className="result-form">
                 <div>
                     {
