@@ -10,6 +10,8 @@ import NotFound from './pages/NotFound.tsx'
 import Compare from './pages/Compare.tsx'
 import Result from './pages/Result.tsx'
 import Setup from './pages/Setup.tsx'
+import History from './pages/History.tsx'
+import HistoryItems from './pages/HistoryItems.tsx'
 
 const router = createBrowserRouter([
   {path: "/", element: <App />}, //default route
@@ -17,6 +19,9 @@ const router = createBrowserRouter([
   {path: "/compare", element: <Compare />},
   {path: "/result", element: <Result />},
   {path: "/setup", element: <Setup />},
+  {path: "/history", element: <History />},
+  {path: "/history/:id", element: <HistoryItems />},
+  
 ])
 
 createRoot(document.getElementById('root')!).render(

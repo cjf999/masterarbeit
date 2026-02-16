@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 //import other components
-import Footer from "./footer";
+import Footer from "./Footer";
 import Navbar from "./Navbar";
 
 export default function SimLoader(){

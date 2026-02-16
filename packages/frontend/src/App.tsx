@@ -3,7 +3,7 @@ import { useLocation } from 'react-router-dom';
 import './App.css'
 //import other components
 import Navbar from './components/Navbar';
-import Footer from './components/footer';
+import Footer from './components/Footer';
 
 function App() {
  
