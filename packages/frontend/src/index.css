@@ -41,6 +41,9 @@ p {
   color: #1F2933;
 }
 
+/* component styling */
+
+/* footer */
 .footer{
   display: flex;
   position: fixed;
@@ -62,4 +65,83 @@ p {
 .footer-content p{
   color: #ffffff;
   font-weight: bold;
+}
+
+/* navbar */
+.navbar{
+  filter: drop-shadow(0 0 0.5rem grey);
+  background-color: #E1E4E8;
+  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+}
+
+.navbar-content{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: #1F2933;
+  padding: 0 50px;
+}
+
+.navbar-content ul{
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  list-style: none;
+  gap: 50px;
+}
+
+.navbar-content li{
+  background-color: #2563EB;
+  border-radius: 7px;
+  
+}
+
+.navbar-content a{
+  display: flex;
+  align-items: center;
+  color: #F7F8FA;
+  text-decoration: inherit;
+  height: 100%;
+  padding: 5px;
+}
+
+.setup-link{
+  text-decoration: none;
+  background-color: #2563EB;
+  border-radius: 7px;
+}
+
+.setup-link:hover{
+  -o-transition:.2s;
+  -ms-transition:.2s;
+  -moz-transition:.2s;
+  -webkit-transition:.2s;
+  transition:.2s;
+  box-shadow: 1px 1px 15px #888888;
+
+  border-radius: 7px;
+}
+
+/* ts brokey and not workey */
+.setup-link.active{
+  background-color: #F88500;
+}
+
+/* er macht aus <Link /> einen <a /> tag aber es passiert nix (aber auch noch nicht im scope der abfrage) */
+.navbar-content a.active{
+  background-color: #F88500;
+}
+
+.navbar-content li:hover{
+  -o-transition:.2s;
+  -ms-transition:.2s;
+  -moz-transition:.2s;
+  -webkit-transition:.2s;
+  transition:.2s;
+  box-shadow: 1px 1px 15px #888888;
+
+  border-radius: 7px;
 }
