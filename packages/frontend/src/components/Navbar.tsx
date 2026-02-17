@@ -1,4 +1,4 @@
-import { Link, useMatch, useResolvedPath, NavLink, Navigate, useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 
 export default function Navbar(){
 
