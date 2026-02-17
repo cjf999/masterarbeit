@@ -65,6 +65,11 @@ export default function Result() {
         setSimulationId(simId); // !!Wichtig!! hier wird state geändert und fetchData erneut aufgerufen
     }
 
+    const fetchHandler = () => {
+        fetchData(simulationId);
+        console.log("gefundene daten:", data);
+    }
+
     return(
         <>
         <Navbar />
@@ -80,6 +85,11 @@ export default function Result() {
             </div>
         </form>
         <p>ID der zuletzt durchgeführten Simulation: {simulationId}</p> 
+        <br />
+        <p>debugging-button:</p>
+        <div>
+            <button onClick={fetchHandler}>Daten neu laden und in konsole printen</button>
+        </div>
         <Link to={"/"}>Zurück</Link>
         <Footer />
         </>
