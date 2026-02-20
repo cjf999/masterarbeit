@@ -1,9 +1,14 @@
 import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import { Tooltip, Zoom } from "@mui/material";
 
 
 function Setup(){
+
+
+    const popsizeTooltip = "Die Populationsgröße gibt an, wie viele Individuen in einer Simulation berücksichtigt werden." 
+    "Eine größere Population bedeutet zum einen mehr Rechenzeit, bietet zum anderen aber vollwertigerere Ergebnisse.";
 
     //direkt on submit zur result view navigieren
     const navigate = useNavigate();
@@ -44,7 +49,7 @@ function Setup(){
         const data = new FormData(e.currentTarget);
         const values = Object.fromEntries(data.entries());
 
-        //übergebe params im erwarteten format
+        //übergebe params im erwarteten format (batchruns fix)
         const parameter = {
             "populationSize": Number(values.popSize),
             "transmissionRate": Number(values.transmissionRate),
@@ -85,6 +90,7 @@ function Setup(){
     }
 
     //TODO: default-werte in inputfelder geben 
+    //TODO: tooltip für alle parameter, interventionen disabled + aus payload entfernen
     return(
         <>
         <Navbar />
@@ -92,6 +98,7 @@ function Setup(){
             <form className="setup-form" onSubmit={handleSubmit}>
                 <div className="input-rows"> {/** ich bin dumm, das sind columns, nicht rows */}
                     <div className="setup-row">
+                        <Tooltip title={popsizeTooltip} placement="right" arrow slots={{transition: Zoom}} slotProps={{tooltip:{sx:{fontSize: "0.9rem", maxWidth: "150px"}}}}>
                         <div className="param">
                             <p>Hier wird die  <i>Populationsgröße</i> eingegeben</p>
                             <input name="popSize" type="number" />
@@ -100,6 +107,7 @@ function Setup(){
                             )
                             )}</div>
                         </div>
+                        </Tooltip>
                         <div className="param">
                             <p>Hier wird die <i>Übertragungsrate</i> angegeben</p>
                             <input name="transmissionRate" type="number" step="0.01" min="0" />
@@ -108,9 +116,9 @@ function Setup(){
                             )
                             )}</div>
                         </div>
-                        <div className="param">
+                        <div className="param" id="intervention-param">
                             <p>Hier wird die <i>Intervention</i> angegeben</p>
-                            <input name="intervention" type="text" />
+                            <input name="intervention" type="text" disabled/>
                             <div>{params.map((item) => (
                                 <p style={{fontWeight: "800"}}>Der Placeholder-Wert ist: {item.intervention}</p>
                             )
