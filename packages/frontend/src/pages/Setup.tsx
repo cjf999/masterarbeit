@@ -10,6 +10,23 @@ function Setup(){
     const popsizeTooltip = "Die Populationsgröße gibt an, wie viele Individuen in einer Simulation berücksichtigt werden." 
     "Eine größere Population bedeutet zum einen mehr Rechenzeit, bietet zum anderen aber vollwertigerere Ergebnisse.";
 
+    const transmissionrateTooltip = "Die Übertragungsrate gibt an, wie wahrscheinlich es ist, dass ein Virus von einer infizierten Person auf eine gesunde Person übertragen wird."
+     "Eine höhere Übertragungsrate repräsentiert ein ansteckenderes Virus.";
+
+    const interventionTooltip = "Interventionen beschreiben Gegenmaßnahmen, die ergriffen werden können, um die Ausbreitung eines Virus innerhalb der Bevölkerung zu reduzieren.";
+
+    const householdsizeTooltip = "Beschreibt, wie viele Individuen im Durchschnitt in einem Haushalt zusammenleben. Mehr Personen in einem Haushalt kann die Ausbreitung von Viren begünstigen.";
+
+    const officesizeTooltip = "Beschreibt, wie viele Individuen im Durchschnitt in einem Büro zusammenarbeiten. Mehr Personen in einem Büro kann die Ausbreitung von Viren begünstigen.";
+    
+    const schoolsizeTooltip = "Beschreibt, wie viele Individuen im Durchschnitt eine einzelne Schule besuchen. Mehr Personen in einer Schule kann die Ausbreitung von Viren begünstigen.";
+
+    const startdateTooltip = "Das Startdatum gibt an, wann die Simulation beginnen soll."; //maybe auswirkung von Zeitraum ergänzen
+
+    const enddateTooltip = "Das Enddatum gibt an, wann die Simulation enden soll.";
+
+    const seedTooltip = "Der Seed ist eine Zahl, die als Referenzwert für Zufallsereignisse in der Simulation dient. Gleiche Seeds führen zum gleichen Auftreten von Zufallsereignissen."; //ist das korrekt?
+
     //direkt on submit zur result view navigieren
     const navigate = useNavigate();
 
@@ -108,6 +125,7 @@ function Setup(){
                             )}</div>
                         </div>
                         </Tooltip>
+                        <Tooltip title={transmissionrateTooltip} placement="right" arrow slots={{transition: Zoom}} slotProps={{tooltip:{sx:{fontSize: "0.9rem", maxWidth: "150px"}}}}>
                         <div className="param">
                             <p>Hier wird die <i>Übertragungsrate</i> angegeben</p>
                             <input name="transmissionRate" type="number" step="0.01" min="0" />
@@ -116,6 +134,8 @@ function Setup(){
                             )
                             )}</div>
                         </div>
+                        </Tooltip>
+                        <Tooltip title={interventionTooltip} placement="right" arrow slots={{transition: Zoom}} slotProps={{tooltip:{sx:{fontSize: "0.9rem", maxWidth: "150px"}}}}>
                         <div className="param" id="intervention-param">
                             <p>Hier wird die <i>Intervention</i> angegeben</p>
                             <input name="intervention" type="text" disabled/>
@@ -124,9 +144,11 @@ function Setup(){
                             )
                             )}</div>                        
                         </div>
+                        </Tooltip>
                     </div>
                     {/** second row */}
                     <div className="setup-row">
+                        <Tooltip title={householdsizeTooltip} placement="right" arrow slots={{transition: Zoom}} slotProps={{tooltip:{sx:{fontSize: "0.9rem", maxWidth: "150px"}}}}>
                         <div className="param">
                             <p>Hier wird die <i>Household Size</i> angegeben</p>
                             <input name="avgHouseholdSize" type="number" />
@@ -135,6 +157,8 @@ function Setup(){
                             )
                             )}</div>
                         </div>
+                        </Tooltip>
+                        <Tooltip title={schoolsizeTooltip} placement="right" arrow slots={{transition: Zoom}} slotProps={{tooltip:{sx:{fontSize: "0.9rem", maxWidth: "150px"}}}}>
                         <div className="param">
                             <p>Hier wird die <i>School Size</i> angegeben</p>
                             <input name="avgSchoolSize" type="number" />
@@ -143,6 +167,8 @@ function Setup(){
                             )
                             )}</div>                        
                         </div>
+                        </Tooltip>
+                        <Tooltip title={officesizeTooltip} placement="right" arrow slots={{transition: Zoom}} slotProps={{tooltip:{sx:{fontSize: "0.9rem", maxWidth: "150px"}}}}>
                         <div className="param">
                             <p>Hier wird die <i>Office Size</i> angegeben</p>
                             <input name="avgOfficeSize" type="number" />
@@ -151,9 +177,11 @@ function Setup(){
                             )
                             )}</div>                        
                         </div>
+                        </Tooltip>
                     </div>
                     {/** third row */}
                     <div className="setup-row">
+                        <Tooltip title={startdateTooltip} placement="right" arrow slots={{transition: Zoom}} slotProps={{tooltip:{sx:{fontSize: "0.9rem", maxWidth: "150px"}}}}>
                         <div className="param">
                             <p>Hier wird das <i>Startdatum</i> angegeben</p>
                             <input name="startDate" type="date" />
@@ -162,6 +190,8 @@ function Setup(){
                             )
                             )}</div>                        
                         </div>
+                        </Tooltip>
+                        <Tooltip title={enddateTooltip} placement="right" arrow slots={{transition: Zoom}} slotProps={{tooltip:{sx:{fontSize: "0.9rem", maxWidth: "150px"}}}}>
                         <div className="param">
                             <p>Hier wird das <i>Enddatum</i> angegeben</p>
                             <input name="endDate" type="date" />
@@ -170,6 +200,8 @@ function Setup(){
                             )
                             )}</div>                        
                         </div>
+                        </Tooltip>
+                        <Tooltip title={seedTooltip} placement="right" arrow slots={{transition: Zoom}} slotProps={{tooltip:{sx:{fontSize: "0.9rem", maxWidth: "150px"}}}}>
                         <div className="param">
                             <p>Hier wird der <i>Seed</i> angegeben</p>
                             <input name="seed" type="number" />
@@ -178,6 +210,7 @@ function Setup(){
                             )
                             )}</div>                        
                         </div>
+                        </Tooltip>
                     </div>
                     <button type="submit" className="button-container start-button" >
                         Simulation starten
