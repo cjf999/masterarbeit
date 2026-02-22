@@ -1,5 +1,5 @@
 :root {
-  font-family: system-ui, Roboto, Helvetica, Arial, sans-serif;
+  font-family: system-ui, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 600;
 
@@ -43,6 +43,34 @@ p {
 }
 
 /* component styling */
+
+.main-container{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 80px;
+  padding-top: 80px;
+  padding-bottom: 80px;
+}
+
+.content{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  background-color: #E1E4E8;
+  padding-left: 15px;
+  padding-right: 15px;
+  padding-bottom: 30px;
+  border-radius: 10px;
+  filter: drop-shadow(0 0 0.3rem grey);
+}
+
+.content:hover{
+  cursor: pointer;
+}
 
 /* footer */
 .footer{
@@ -178,4 +206,15 @@ p {
  font-weight: 700;
  padding: 30px;
  border-radius: 7px;
+}
+
+.start-button:hover{
+  -o-transition:.2s;
+  -ms-transition:.2s;
+  -moz-transition:.2s;
+  -webkit-transition:.2s;
+  transition:.2s;
+  box-shadow: 1px 1px 15px #888888;
+  background-color: #2b6af1;
+  border-radius: 7px;
 }
