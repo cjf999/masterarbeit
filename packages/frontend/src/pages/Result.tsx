@@ -27,6 +27,7 @@ export default function Result() {
     */
 
     const [simulationId, setSimulationId] = useState(""); 
+    const [inputValue, setInputValue] = useState(""); //
     const [data, setData] = useState(null);
 
     //holt state prop aus aktueller location um später {id} an URL anzuhängen
@@ -59,6 +60,7 @@ export default function Result() {
     //submit handler 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
+        setSimulationId(inputValue); 
         const data = new FormData(event.currentTarget);
         const simId = data.get("id") as string;
         console.log('looking for simId', simId);
@@ -76,15 +78,33 @@ export default function Result() {
         <h1>Result View</h1>
         <h2>Hier können durchgeführte Simulationen über ihre ID geladen werden.</h2>
         
-        <form onSubmit={handleSubmit} className="result-form">
+        <form onSubmit={handleSubmit} className="result-form" > 
             Gib hier die id der simulation ein, um die ergebnisse zu laden:
             <div>
-                {
-                    simulationId ? <input name="id" type="text" value={simulationId} /> : <input name="id" type="text" />
-                }
+                
+                    <input 
+                    name="id" 
+                    type="text" 
+                    value={inputValue} 
+                    onChange={e => setInputValue(e.target.value)} 
+                    />
+                
             </div>
+            <button 
+            type="submit" 
+            className="button-container start-button" 
+            style={{marginTop: "20px"}}
+            >
+                Simulation holen
+            </button>
         </form>
-        <p>ID der zuletzt durchgeführten Simulation: {simulationId}</p> 
+        <p>ID der zuletzt geholten Simulation: {inputValue}</p> 
+        <br />
+        <div>
+            <p>hier die daten:
+                
+            </p>
+        </div>
         <br />
         <p>debugging-button:</p>
         <div>
