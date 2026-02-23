@@ -12,6 +12,7 @@ import Result from './pages/Result.tsx'
 import Setup from './pages/Setup.tsx'
 import History from './pages/History.tsx'
 import HistoryItems from './pages/HistoryItems.tsx'
+import Success from './pages/Success.tsx'
 
 const router = createBrowserRouter([
   {path: "/", element: <App />}, //default route
@@ -21,6 +22,7 @@ const router = createBrowserRouter([
   {path: "/setup", element: <Setup />},
   {path: "/history", element: <History />},
   {path: "/history/:id", element: <HistoryItems />},
+  {path: "/success", element: <Success />},
   
 ])
 

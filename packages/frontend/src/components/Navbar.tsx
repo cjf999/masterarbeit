@@ -11,11 +11,6 @@ export default function Navbar(){
     return(
         <nav className="navbar">
             <div className="navbar-content">
-                { /*
-                <Link className="setup-link" to="/setup" >
-                    Setup
-                </Link>
-                */}
                 <h2 onClick={routeChange} style={{cursor: "pointer"}}>GEMS Interface</h2>
                 <ul>
                     <NavLink className="nav-link" to="/setup">Setup</NavLink>

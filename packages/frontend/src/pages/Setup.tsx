@@ -99,7 +99,7 @@ function Setup(){
             if (res.ok) {
                 const result = await res.json();
                 console.log("Created:", result);
-                navigate("/result", { state: { simId: result.simulationId } }); //gehe direkt zur Result View
+                navigate("/success", { state: { simId: result.simulationId } }); //gehe direkt zur success View
             }
         } catch (error) {
             console.error("Error:", error);
@@ -108,6 +108,8 @@ function Setup(){
 
     //TODO: default-werte in inputfelder geben 
     //TODO: tooltip für alle parameter, interventionen disabled + aus payload entfernen
+    //TODO: errorhandling als html (z.B. wenn api call fehlschlägt, oder ungültige parameter eingegeben wurden)
+    //TODO: negative/ungültige eingaben abfangen
     return(
         <>
         <Navbar />

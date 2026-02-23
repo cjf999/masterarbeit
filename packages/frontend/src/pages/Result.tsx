@@ -38,7 +38,7 @@ export default function Result() {
         setSimulationId(state?.simId || "");
     }, [state])
 
-    //wenn sich sim id ändert, dann neue daten mit neuer sim id fetchen
+    //wenn sich simulationId ändert, dann neue daten mit neuer simulationId fetchen
     useEffect(() => {
         fetchData(simulationId);
     }, [simulationId])
@@ -100,17 +100,19 @@ export default function Result() {
         </form>
         <p>ID der zuletzt geholten Simulation: {inputValue}</p> 
         <br />
+        {/**
         <div>
             <p>hier die daten:
                 
             </p>
         </div>
-        <br />
+         */}
         <p>debugging-button:</p>
         <div>
             <button onClick={fetchHandler}>Daten neu laden und in konsole printen</button>
         </div>
-        <Link to={"/"}>Zurück</Link>
+        <br />
+        <Link to={"/"}>Zurück zur Startseite</Link>
         <Footer />
         </>
     )
