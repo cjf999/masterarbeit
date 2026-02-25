@@ -81,8 +81,8 @@ function Setup(){
                     "duration": 14
                 }
             ],
-            "startDate": values.startDate,
-            "endDate": values.endDate,
+            "startDate": String(values.startDate).replaceAll("-", "."), //umwandeln von dd.mm.yyyy zu dd-mm-yyyy, damit api call funktioniert
+            "endDate": String(values.endDate).replaceAll("-", "."),
             "seed": Number(values.seed)
         }
 

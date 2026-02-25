@@ -8,21 +8,22 @@ import './index.css'
 import App from './App.tsx'
 import NotFound from './pages/NotFound.tsx'
 import Compare from './pages/Compare.tsx'
-import Result from './pages/Result.tsx'
 import Setup from './pages/Setup.tsx'
 import History from './pages/History.tsx'
 import HistoryItems from './pages/HistoryItems.tsx'
 import Success from './pages/Success.tsx'
+import Result from './pages/Result.tsx'
 
 const router = createBrowserRouter([
   {path: "/", element: <App />}, //default route
   {path: "*", element: <NotFound />}, //wenn nicht auflösbar, dann gehe hier hin (404)
   {path: "/compare", element: <Compare />},
-  {path: "/result", element: <Result />},
   {path: "/setup", element: <Setup />},
   {path: "/history", element: <History />},
   {path: "/history/:id", element: <HistoryItems />},
   {path: "/success", element: <Success />},
+  {path: "/result", element: <Result />},
+  {path: "/result/:id", element: <Result />},
   
 ])
 

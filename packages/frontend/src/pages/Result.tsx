@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
 
 export default function Result() {
 
@@ -32,6 +32,9 @@ export default function Result() {
 
     //holt state prop aus aktueller location um später {id} an URL anzuhängen
     const { state } = useLocation(); 
+
+    //dynamic route param (z.B. /result/1337420) wird in id gespeichert
+    const { id } = useParams();
 
     //wenn sich state ändert, dann setze simulationId auf state.simId (sofern da)
     useEffect(() => {
