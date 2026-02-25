@@ -45,21 +45,6 @@ function Setup(){
         }
     ]
 
-    /** 
-    interface simData {
-        populationSize: number; // zwischen 0 und 1,000,000
-        transmissionRate: number; // zwischen 0.1 und 0.9
-        avgHouseholdSize: number;
-        avgOfficeSize: number;
-        avgSchoolSize: number;
-        batchRuns: 1; //idk ob das geht
-        interventions: string;
-        startDate: string;
-        endDate: string;
-        seed: number;
-    }
-    */
-
     //submithandler
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();

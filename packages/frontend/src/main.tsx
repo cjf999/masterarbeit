@@ -23,7 +23,7 @@ const router = createBrowserRouter([
   {path: "/history/:id", element: <HistoryItems />},
   {path: "/success", element: <Success />},
   {path: "/result", element: <Result />},
-  {path: "/result/:id", element: <Result />},
+  // {path: "/result/:id", element: <Result />},
   
 ])
 

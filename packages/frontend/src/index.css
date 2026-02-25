@@ -42,6 +42,11 @@ p {
   color: #1F2933;
 }
 
+.p-error{
+  color: #DC2626;
+  font-weight: bold;
+}
+
 /* component styling */
 
 .main-container{
@@ -218,4 +223,32 @@ p {
   background-color: #2b6af1;
   border-radius: 7px;
   cursor: pointer;
+}
+
+/* results view */
+.status-success{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.status-failed{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.status-error{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* compare view */
+.compare-container{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 150px;
+  padding-top: 80px;
 }

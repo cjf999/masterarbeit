@@ -2,33 +2,35 @@ import { useEffect, useState } from "react";
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
 import { Link, useLocation, useParams } from "react-router-dom";
+import { Alert, CircularProgress } from "@mui/material";
 
 export default function Result() {
 
-    //dummy params
-    /** 
-    const inputParams = [{
-        id: "1337420"
-    }]
-    */
-
-    //dummy resultParams
-    /**
-    const resultParams = [{
-        simulationId: "1337420",
-        status: "done!",
-        startTime: "31.01.2026",
-        endTime: "31.12.2026",
-        configFile: "someFile",
-        resultFile: "array aus Files",
-        plotFiles: "array aus PlotFiles",
-        errorMessage: "kein fehler aufgetreten"
-    }]
-    */
+    //errorhandling
+    const [error, setError] = useState<string | null>(null);
+    const [loading, setLoading] = useState(false);
 
     const [simulationId, setSimulationId] = useState(""); 
-    const [inputValue, setInputValue] = useState(""); //
-    const [data, setData] = useState(null);
+    const [inputValue, setInputValue] = useState(""); //damit nicht bei jeder zeicheineingabe simId geaändert und dadurch fetchData gecalled wird
+    
+    //checken, ob mit "sim_" beginnt
+    const isValidInput = (simId: string) => {
+        const pattern = /^sim_\d+$/;
+        return pattern.test(simId);
+    }
+
+    type SimulationData = {
+        simulationId: string;
+        status: string;
+        startTime: string;
+        endTime: string;
+        configFile: string;
+        resultFiles: string[];
+        plotFiles: string[];
+        errorMessage: string;
+    }
+
+    const [data, setData] = useState<SimulationData | null>(null);
 
     //holt state prop aus aktueller location um später {id} an URL anzuhängen
     const { state } = useLocation(); 
@@ -47,12 +49,34 @@ export default function Result() {
     }, [simulationId])
 
     //api call
-    const fetchData = (simId: string | null) => {
+    const fetchData = async (simId: string | null) => {
         if (!simId) return;
-        console.log("fetching", "https://gems.hciuse.sh/simulations/" + simId)
-        fetch("https://gems.hciuse.sh/simulations/" + simId).then(async res => {
-            setData(await res.json())
-        });
+
+        if (!isValidInput(simId)) {
+        setError("Die ID muss das Format sim_123456789 haben! Überprüfen Sie Ihre Eingabe.");
+        return;
+        }    
+
+        setLoading(true);
+        setError(null);
+        setData(null);
+
+        try {
+            console.log("fetching", "https://gems.hciuse.sh/simulations/" + simId)
+            const res = await fetch("https://gems.hciuse.sh/simulations/" + simId);
+            
+            if (!res.ok){
+                throw new Error("Fehler beim Abrufen der Ergebnisse. Fehlercode: " + res.status);
+            }
+
+            setData(await res.json());
+        }
+        catch (err: any){
+            setError(err.message || "Unbekannter Fehler beim Abrufen der Ergebnisse");
+        }
+        finally{
+            setLoading(false);
+        }
     }
 
     //wenn data sich ändert, dann loggen (debug)
@@ -68,11 +92,6 @@ export default function Result() {
         const simId = data.get("id") as string;
         console.log('looking for simId', simId);
         setSimulationId(simId); // !!Wichtig!! hier wird state geändert und fetchData erneut aufgerufen
-    }
-
-    const fetchHandler = () => {
-        fetchData(simulationId);
-        console.log("gefundene daten:", data);
     }
 
     return(
@@ -101,19 +120,24 @@ export default function Result() {
                 Simulation holen
             </button>
         </form>
-        <p>ID der zuletzt geholten Simulation: {inputValue}</p> 
+        <p>ID der zuletzt geholten Simulation: {data?.simulationId}</p> 
         <br />
-        {/**
-        <div>
-            <p>hier die daten:
-                
-            </p>
-        </div>
-         */}
-        <p>debugging-button:</p>
-        <div>
-            <button onClick={fetchHandler}>Daten neu laden und in konsole printen</button>
-        </div>
+        {loading && <CircularProgress />}
+        {error && 
+            <div className="status-error">
+                <Alert severity="error">{error}</Alert>
+            </div>
+        }
+        {data && data.status === "completed" && (
+            <div className="status-success">
+                <Alert severity="success">Status: {data.status}</Alert>
+            </div>
+        )}
+        {data && data.status !== "completed" && (
+            <div className="status-failed">
+                <Alert severity="warning">Status: {data.status}</Alert>
+            </div>
+        )}
         <br />
         <Link to={"/"}>Zurück zur Startseite</Link>
         <Footer />
