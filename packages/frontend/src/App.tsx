@@ -16,6 +16,7 @@ function App() {
   return (
     <>
     <Navbar />
+    <div className="page-container">
     <h1>Willkommen!</h1>
     <h2>Wie möchten Sie fortfahren?</h2>
     <div className="main-container">
@@ -39,6 +40,7 @@ function App() {
       </div>
     </div>
     <button onClick={clickHandler}>Gib aktuelle url aus</button>
+    </div>
     <Footer />
     </>
   )

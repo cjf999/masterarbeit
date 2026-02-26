@@ -97,16 +97,22 @@ export default function SimLoader(){
             <Navbar /> 
             <h2>SimLoader-Component</h2>
             <form onSubmit={handleSubmit} className="result-form">
-            <div>
-                
+            <div className="fetch-container">
                     <input 
+                    className="fetch-input"
                     name="id" 
                     type="text" 
                     value={inputValue} 
                     onChange={e => setInputValue(e.target.value)} 
                     />
-                
             </div>
+            <button 
+            type="submit" 
+            className="button-container fetch-button" 
+            style={{marginTop: "20px"}}
+            >
+                Ergebnisse laden
+            </button>
             </form>
             {loading && <CircularProgress />}
             {error && <Alert severity="error">{error}</Alert>}
@@ -115,7 +121,7 @@ export default function SimLoader(){
                     <Alert severity="warning">Status: {data.status}</Alert>
                 </div>
             )}    
-            {/** wenn daten da, dann hier ausgeben */}        
+            {/** wenn daten da, dann hier ausgeben */}
         </>
         )
 }

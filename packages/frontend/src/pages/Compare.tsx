@@ -7,11 +7,12 @@ function Compare(){
     return(
         <>
         <Navbar />
+        <div className="compare-container">
         <h1>Compare View</h1>
         <div className="" style={{textAlign: "center"}}>
             <p>Zwei Simulationen vergleichen</p>
         </div>        
-        <div className="compare-container">
+        <div className="compare-content">
             <div className="view-left">
                 <div> {/*first simloader*/}
                     <SimLoader />
@@ -30,7 +31,8 @@ function Compare(){
 
         <div style={{textAlign: "center", marginTop: "50px"}}>
             <Link to={"/"}>Zurück zur Startseite</Link>
-        </div>        
+        </div>   
+        </div>     
         <Footer />
         </>
     )

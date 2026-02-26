@@ -30,6 +30,14 @@ export default function Result() {
         errorMessage: string;
     }
 
+    type Artifact = {
+        type: "plot" | "csv";
+        mime: string;
+        filename: string;
+        size: number;
+        createdAt: string;
+    }
+
     const [data, setData] = useState<SimulationData | null>(null);
 
     //holt state prop aus aktueller location um später {id} an URL anzuhängen
@@ -97,31 +105,44 @@ export default function Result() {
     return(
         <>
         <Navbar />
+        <div className="result-container">
         <h1>Result View</h1>
         <h2>Hier können durchgeführte Simulationen über ihre ID geladen werden.</h2>
-        
+
         <form onSubmit={handleSubmit} className="result-form" > 
             Gib hier die id der simulation ein, um die ergebnisse zu laden:
-            <div>
-                
+            <div className="fetch-container">
+                    {simulationId ? 
                     <input 
+                    className="fetch-input"
                     name="id" 
                     type="text" 
+                    value={simulationId} // hier muss maybe noch onChange rein, sonst wird input unbrauchbar
+                    /> 
+                    :
+                    <input 
+                    className="fetch-input"
+                    name="id" 
+                    type="text" 
+                    placeholder="SimID eingeben..."
                     value={inputValue} 
                     onChange={e => setInputValue(e.target.value)} 
-                    />
-                
-            </div>
+                    />                     
+                    }
+
             <button 
             type="submit" 
-            className="button-container start-button" 
-            style={{marginTop: "20px"}}
+            className="button-container fetch-button" 
             >
-                Simulation holen
+                Ergebnisse laden
             </button>
+
+            </div>
+
         </form>
-        <p>ID der zuletzt geholten Simulation: {data?.simulationId}</p> 
-        <br />
+        {/** <p>ID der zuletzt geholten Simulation: {data?.simulationId}</p> 
+        <br /> */}
+        
         {loading && <CircularProgress />}
         {error && 
             <div className="status-error">
@@ -130,16 +151,18 @@ export default function Result() {
         }
         {data && data.status === "completed" && (
             <div className="status-success">
-                <Alert severity="success">Status: {data.status}</Alert>
+                <Alert severity="success">Status der Simulation: {data.status}. yay!</Alert>
             </div>
         )}
         {data && data.status !== "completed" && (
             <div className="status-failed">
-                <Alert severity="warning">Status: {data.status}</Alert>
+                <Alert severity="warning">Status der Simulation: {data.status}. yuck..</Alert>
             </div>
         )}
         <br />
-        <Link to={"/"}>Zurück zur Startseite</Link>
+        <Link className="return-link" to={"/"}>Zurück zur Startseite</Link>
+        </div>
+     
         <Footer />
         </>
     )

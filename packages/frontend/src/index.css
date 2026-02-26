@@ -11,6 +11,11 @@
   
   display: flex;
   flex-direction: column;
+
+  width: 100%;
+  height: 100%;
+  /* margin-top: 76px; */
+
 }
 
 #root {
@@ -22,10 +27,11 @@
 body {
   margin: 0;
   display: flex;
-  place-items: center;
-  min-width: 320px;
+  align-items: center;
+  justify-content: center;
+  min-width: 320px; /* brauche ich das? */
   min-height: 100vh;
-  text-align: center;
+  overflow: hidden;
 }
 
 h1 {
@@ -48,6 +54,13 @@ p {
 }
 
 /* component styling */
+.page-container{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+}
 
 .main-container{
   display: flex;
@@ -75,6 +88,11 @@ p {
 
 .content:hover{
   cursor: pointer;
+}
+
+.return-link{
+  position: fixed;
+  bottom: 100px;
 }
 
 /* footer */
@@ -164,6 +182,15 @@ p {
   border-radius: 7px;
 }
 
+/* setup view */
+.setup-container{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+}
+
 /* sim loader */
 .input-rows{
   display: flex;
@@ -172,7 +199,7 @@ p {
   padding-left: 50px;
   padding-right: 50px;
   padding-bottom: 50px;
-
+  gap: 75px;
 }
 
 .param{
@@ -226,6 +253,35 @@ p {
 }
 
 /* results view */
+.result-container{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 80px;
+  min-height: 100vh;
+}
+
+.fetch-button{
+ color: #ffffff;
+ background-color: #2563EB;
+ font-weight: 600;
+ font-size: 16px;
+ padding: 20px;
+ border-radius: 7px;
+}
+
+.fetch-button:hover{
+  -o-transition:.2s;
+  -ms-transition:.2s;
+  -moz-transition:.2s;
+  -webkit-transition:.2s;
+  transition:.2s;
+  box-shadow: 1px 1px 15px #888888;
+  background-color: #2b6af1;
+  border-radius: 7px;
+  cursor: pointer;
+}
+
 .status-success{
   display: flex;
   justify-content: center;
@@ -244,11 +300,43 @@ p {
   align-items: center;
 }
 
+.fetch-container{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #E1E4E8;
+  gap: 20px;
+  padding: 20px;
+}
+
+.fetch-input{
+  padding: 0px;
+    height:20px;
+    font-size:12pt;  
+}
+
 /* compare view */
 .compare-container{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 80px;
+  min-height: 100vh;
+}
+
+.compare-content{
   display: flex;
   flex-direction: row;
   justify-content: center;
   gap: 150px;
   padding-top: 80px;
+}
+
+/* history view */
+.history-container{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 80px;
+  min-height: 100vh;
 }

@@ -98,7 +98,8 @@ function Setup(){
     return(
         <>
         <Navbar />
-            <h2 style={{paddingLeft: "50px", marginTop: "35px"}}>Nachfolgend die Parameter eingeben:</h2>
+        <div className="setup-container">
+            <h2>Nachfolgend die Parameter eingeben:</h2>
             <form className="setup-form" onSubmit={handleSubmit}>
                 <div className="input-rows"> {/** ich bin dumm, das sind columns, nicht rows */}
                     <div className="setup-row">
@@ -207,6 +208,7 @@ function Setup(){
                     </div>           
                 </div>       
             </form>
+            </div>
             <Footer />        
         </>
     )

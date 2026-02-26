@@ -30,30 +30,11 @@ const History = () => {
         createData("sim_0000000000001", 202, 11000, 2000, 1, 0.2, 0.6, 0.47, "01.01.2025", "01.07.2025")
     ]
 
-    //dummy content: array aus simulationen mit id
-    {/** 
-    const simulationen = [
-        { id: 1, title: "Simulation 1"},
-        { id: 2, title: "Simulation 2"},
-        { id: 3, title: "Simulation 3"}
-    ]
-    */}
-
     return(
     <>
         <Navbar />
+        <div className="history-container">
         <h2>Vergangene Simulationen</h2>
-        {/** 
-        <ul className="ul-history" style={{listStyle: "none", display: "flex", justifyContent: "space-around"}}>
-            {simulationen.map((item) => ( //gehe über das array, gib pro id die entsprechende sim aus
-                <li key={item.id} className="li-history">
-                    <Link to={`/history/${item.id}`}>
-                        <h2>{item.title}</h2>
-                    </Link>
-                </li>
-            ))}
-        </ul>
-        */}
 
         <div className="table-history" style={{textAlign: "center", display: "flex",alignItems: "center", justifyContent: "center"}}>
             <TableContainer style={{maxWidth: "1200px", fontSize: "1rem"}}> 
@@ -90,6 +71,7 @@ const History = () => {
             </TableBody>
             </Table>
             </TableContainer>
+        </div>
         </div>
         <Footer />
     </>
