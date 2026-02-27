@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
-import { Link, useLocation, useParams } from "react-router-dom";
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import { Alert, CircularProgress } from "@mui/material";
 
 export default function Result() {
@@ -10,10 +10,13 @@ export default function Result() {
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
 
+    //data für fetch
+    const [data, setData] = useState<SimulationData | null>(null);
+
     const [simulationId, setSimulationId] = useState(""); 
     const [inputValue, setInputValue] = useState(""); //damit nicht bei jeder zeicheineingabe simId geaändert und dadurch fetchData gecalled wird
     
-    //checken, ob mit "sim_" beginnt
+    //checken, ob input mit "sim_" beginnt
     const isValidInput = (simId: string) => {
         const pattern = /^sim_\d+$/;
         return pattern.test(simId);
@@ -38,18 +41,28 @@ export default function Result() {
         createdAt: string;
     }
 
-    const [data, setData] = useState<SimulationData | null>(null);
+    //konkrete ergebnisse 
+    const [artifacts, setArtifacts] = useState<Artifact[]>([]);
+    const [artifactError, setArtifactError] = useState<string | null>(null);
 
-    //holt state prop aus aktueller location um später {id} an URL anzuhängen
+    //quellen für simulationId
     const { state } = useLocation(); 
+    const { simId } = useParams<{simId: string}>();    
 
-    //dynamic route param (z.B. /result/1337420) wird in id gespeichert
-    const { id } = useParams();
+    //navigieren
+    const navigate = useNavigate();
 
-    //wenn sich state ändert, dann setze simulationId auf state.simId (sofern da)
+    //setze simulationId auf simId (egal ob von eingabe oder durch übergabe!) und update bei änderung
     useEffect(() => {
-        setSimulationId(state?.simId || "");
-    }, [state])
+        if(simId){
+            setSimulationId(simId);
+            setInputValue(simId);
+        }
+        else if(state?.simId){
+            setSimulationId(state.simId)
+            setInputValue(state.simId)
+        }
+    }, [simId, state]);
 
     //wenn sich simulationId ändert, dann neue daten mit neuer simulationId fetchen
     useEffect(() => {
@@ -76,7 +89,6 @@ export default function Result() {
             if (!res.ok){
                 throw new Error("Fehler beim Abrufen der Ergebnisse. Fehlercode: " + res.status);
             }
-
             setData(await res.json());
         }
         catch (err: any){
@@ -95,12 +107,51 @@ export default function Result() {
     //submit handler 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        setSimulationId(inputValue); 
-        const data = new FormData(event.currentTarget);
-        const simId = data.get("id") as string;
+
+        if(!isValidInput(inputValue)){
+            setError("Ungültige SimulationID! Das Format muss sim_123456789 sein.")
+            return;
+        }
+
+        navigate(`/result/${inputValue}`);
+
+        // setSimulationId(inputValue); 
+        // const data = new FormData(event.currentTarget);
+        // const simId = data.get("id") as string;
         console.log('looking for simId', simId);
-        setSimulationId(simId); // !!Wichtig!! hier wird state geändert und fetchData erneut aufgerufen
+        // setSimulationId(simId); 
     }
+
+    const fetchArtifacts = async (simId: string) => {
+        
+        setArtifactError(null);
+        setArtifacts([]);
+
+        try{
+            const res = await fetch(`https://gems.hciuse.sh/simulations/${simId}/artifacts`);
+
+            if (!res.ok){
+                throw new Error("Abbildungen und Daten konnten nicht geladen werden.");
+            }
+            setArtifacts(await res.json());
+        }
+        catch (err: any){
+            setArtifactError(err.message);
+            console.log(artifactError)
+        }
+    }
+
+    useEffect(() => {
+
+        if(data && data.status === "completed"){
+            fetchArtifacts(data.simulationId) //gucken auf data und nicht auf eingabe?
+        }
+    }, [data])
+
+    useEffect(() => {
+        console.log('artifactData:', artifacts);
+        console.log("artifactLink", `https://gems.hciuse.sh/simulations/${simulationId}/artifacts/`)
+    }, [data])
 
     return(
         <>
@@ -112,14 +163,7 @@ export default function Result() {
         <form onSubmit={handleSubmit} className="result-form" > 
             Gib hier die id der simulation ein, um die ergebnisse zu laden:
             <div className="fetch-container">
-                    {simulationId ? 
-                    <input 
-                    className="fetch-input"
-                    name="id" 
-                    type="text" 
-                    value={simulationId} // hier muss maybe noch onChange rein, sonst wird input unbrauchbar
-                    /> 
-                    :
+
                     <input 
                     className="fetch-input"
                     name="id" 
@@ -128,8 +172,7 @@ export default function Result() {
                     value={inputValue} 
                     onChange={e => setInputValue(e.target.value)} 
                     />                     
-                    }
-
+                    
             <button 
             type="submit" 
             className="button-container fetch-button" 
@@ -160,6 +203,22 @@ export default function Result() {
             </div>
         )}
         <br />
+        {artifacts.length > 0 && (
+            <div className="artifacts-container">
+                {artifacts.map((artifact) => (
+                    <div key={artifact.filename} className="artifact-item">
+                        {artifact.type === "plot" &&(
+                            <img 
+                            crossOrigin="anonymous" //muss anscheinend
+                            src={`https://gems.hciuse.sh/simulations/${simulationId}/artifacts/${artifact.filename}`} 
+                            alt={artifact.filename}
+                            className="artifact-img"
+                            />
+                        )}
+                    </div>
+                ))}
+            </div>
+        )}
         <Link className="return-link" to={"/"}>Zurück zur Startseite</Link>
         </div>
      

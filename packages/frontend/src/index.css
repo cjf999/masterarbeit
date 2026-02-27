@@ -31,7 +31,7 @@ body {
   justify-content: center;
   min-width: 320px; /* brauche ich das? */
   min-height: 100vh;
-  overflow: hidden;
+  /* overflow: hidden; */
 }
 
 h1 {
@@ -313,6 +313,15 @@ p {
   padding: 0px;
     height:20px;
     font-size:12pt;  
+}
+
+.artifact-item{
+  width: auto;
+}
+
+.artifact-img{
+  width: 700px;
+  height: auto;
 }
 
 /* compare view */
