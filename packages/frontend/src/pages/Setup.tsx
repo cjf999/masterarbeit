@@ -84,7 +84,7 @@ function Setup(){
             if (res.ok) {
                 const result = await res.json();
                 console.log("Created:", result);
-                navigate("/success", { state: { simId: result.simulationId } }); //gehe direkt zur success View
+                navigate("/result", { state: { simId: result.simulationId } }); //gehe direkt zur result view und übergib simId als simulationId
             }
         } catch (error) {
             console.error("Error:", error);
