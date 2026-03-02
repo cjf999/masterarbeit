@@ -42,8 +42,15 @@ export default function Result() {
     }
 
     //konkrete ergebnisse 
+    const [artifactLoading, setArtifactLoading] = useState(false);
     const [artifacts, setArtifacts] = useState<Artifact[]>([]);
     const [artifactError, setArtifactError] = useState<string | null>(null);
+
+    //config (hier einfach als referenzen zum vergleich eingabe/ausgabe)
+    const [config, setConfig] = useState<any>(null);
+    const [configLoading, setConfigLoading] = useState(false);
+    const [configError, setConfigError] = useState<string | null>(null);
+
 
     //quellen für simulationId
     const { state } = useLocation(); 
@@ -124,6 +131,7 @@ export default function Result() {
 
     const fetchArtifacts = async (simId: string) => {
         
+        setArtifactLoading(true);
         setArtifactError(null);
         setArtifacts([]);
 
@@ -139,12 +147,16 @@ export default function Result() {
             setArtifactError(err.message);
             console.log(artifactError)
         }
+        finally{
+            setArtifactLoading(false);
+        }
     }
 
     useEffect(() => {
 
         if(data && data.status === "completed"){
             fetchArtifacts(data.simulationId) //gucken auf data und nicht auf eingabe?
+            //fetchConfig(data.simulationId)
         }
     }, [data])
 
@@ -202,11 +214,13 @@ export default function Result() {
                 <Alert severity="warning">Status der Simulation: {data.status}. yuck..</Alert>
             </div>
         )}
-        <br />
-        {artifacts.length > 0 && (
-            <div className="artifacts-container">
+
+        {artifactLoading && <CircularProgress />}
+        {artifacts.length > 0 && ( //überhaupt was da? wenn ja (> 0), dann gib aus
+            <div className="artifact-container">
+                <h2>Plots:</h2>
                 {artifacts.map((artifact) => (
-                    <div key={artifact.filename} className="artifact-item">
+                    <div key={artifact.filename} className="artifact-item-plot">
                         {artifact.type === "plot" &&(
                             <img 
                             crossOrigin="anonymous" //muss anscheinend
@@ -215,13 +229,18 @@ export default function Result() {
                             className="artifact-img"
                             />
                         )}
-                    </div>
+                    </div> 
                 ))}
             </div>
         )}
-        <Link className="return-link" to={"/"}>Zurück zur Startseite</Link>
+        {artifacts.length > 0 && (
+            <div className="artifact-container">
+                <h2>Rohdaten:</h2>
+            </div>
+        )}
+        
         </div>
-     
+        <Link className="return-link" to={"/"}>Zurück zur Startseite</Link>
         <Footer />
         </>
     )

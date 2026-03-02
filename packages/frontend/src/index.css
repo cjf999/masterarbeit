@@ -93,6 +93,7 @@ p {
 .return-link{
   position: fixed;
   bottom: 100px;
+  left: 50px;
 }
 
 /* footer */
@@ -311,11 +312,19 @@ p {
 
 .fetch-input{
   padding: 0px;
-    height:20px;
-    font-size:12pt;  
+  height:20px;
+  font-size:12pt;  
 }
 
-.artifact-item{
+.artifact-container{
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  margin-bottom: 80px; /* footer */
+  padding: 50px;
+}
+
+.artifact-item-plot{
   width: auto;
 }
 
