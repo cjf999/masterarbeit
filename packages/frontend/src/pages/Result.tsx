@@ -1,3 +1,4 @@
+import toml from "toml";
 import { useEffect, useState } from "react";
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
@@ -51,6 +52,20 @@ export default function Result() {
     const [configLoading, setConfigLoading] = useState(false);
     const [configError, setConfigError] = useState<string | null>(null);
 
+    //output vars für config referenzen
+    const simInfo = config?.Simulation;
+    const popInfo = config?.Population;
+    const pathogenTypeInfo = config?.Simulation?.StartCondition;
+    const pathogenInfo = config?.Pathogens?.Covid19;
+    const interventionInfo = config?.interventions;
+    /*
+    future work: man könnte 
+
+    const batchInfo = config?.batch;
+
+    ergänzen, um batch runs anzuzeigen
+    */ 
+
 
     //quellen für simulationId
     const { state } = useLocation(); 
@@ -76,7 +91,7 @@ export default function Result() {
         fetchData(simulationId);
     }, [simulationId])
 
-    //api call
+    //api call für simdaten
     const fetchData = async (simId: string | null) => {
         if (!simId) return;
 
@@ -129,6 +144,7 @@ export default function Result() {
         // setSimulationId(simId); 
     }
 
+    //api call für plots etc
     const fetchArtifacts = async (simId: string) => {
         
         setArtifactLoading(true);
@@ -139,7 +155,7 @@ export default function Result() {
             const res = await fetch(`https://gems.hciuse.sh/simulations/${simId}/artifacts`);
 
             if (!res.ok){
-                throw new Error("Abbildungen und Daten konnten nicht geladen werden.");
+                throw new Error("Abbildungen und Daten konnten nicht geladen werden. Fehlercode: "+ res.status);
             }
             setArtifacts(await res.json());
         }
@@ -152,17 +168,58 @@ export default function Result() {
         }
     }
 
+    //api call für config (input params etc)
+    const fetchConfig = async (simId: string) => {
+
+        setConfigLoading(true);
+        setConfigError(null);
+        setConfig(null);
+
+        try{
+            const res = await fetch(`https://gems.hciuse.sh/simulations/${simId}/config`);
+
+            if(!res.ok){
+                throw new Error("Config-Daten konnten nicht geladen werden. Fehlercode: "+ res.status);
+            }
+
+            /**
+             * dieses mumbo jumbo replace() muss leider sein, weil sonst versucht wird, einen float-value auf ein integer-array zu parsen. 
+             * ggfs. TOML-config anpassen, sodass ein array wie zb "[1, 0.0]" als [1.0, 0.0]
+             * der parser liest das erste element im array und macht daran fest, von welchem typ das array ist.
+             * im obigen fall 1 wäre ein int, aber 0.x ein float. alle elemente müssen den selben typ haben
+             * */
+            const text = await res.text();
+            const fixedText = text.replace(/\[1,\s*(0\.\d+)\]/g, "[1.0, $1]");
+            const parsedText = toml.parse(fixedText);
+            setConfig(parsedText);
+        }
+        catch (err: any){
+            setConfigError(err.message);
+            console.log(configError);
+        }
+        finally{
+            setConfigLoading(false);
+        }
+    }
+
     useEffect(() => {
 
         if(data && data.status === "completed"){
             fetchArtifacts(data.simulationId) //gucken auf data und nicht auf eingabe?
-            //fetchConfig(data.simulationId)
+            fetchConfig(data.simulationId)
         }
     }, [data])
 
+    //debug artifacts
     useEffect(() => {
         console.log('artifactData:', artifacts);
         console.log("artifactLink", `https://gems.hciuse.sh/simulations/${simulationId}/artifacts/`)
+    }, [data])
+
+    //debug config
+    useEffect(() => {
+        console.log('configData:', config);
+        console.log("configLink", `https://gems.hciuse.sh/simulations/${simulationId}/config/`)
     }, [data])
 
     return(
@@ -170,10 +227,10 @@ export default function Result() {
         <Navbar />
         <div className="result-container">
         <h1>Result View</h1>
-        <h2>Hier können durchgeführte Simulationen über ihre ID geladen werden.</h2>
+
 
         <form onSubmit={handleSubmit} className="result-form" > 
-            Gib hier die id der simulation ein, um die ergebnisse zu laden:
+            <p style={{textAlign: "center"}}>Geben Sie hier die ID der Simulation ein, um die Ergebnisse einzusehen:</p>
             <div className="fetch-container">
 
                     <input 
@@ -191,34 +248,43 @@ export default function Result() {
             >
                 Ergebnisse laden
             </button>
-
-            </div>
-
-        </form>
-        {/** <p>ID der zuletzt geholten Simulation: {data?.simulationId}</p> 
-        <br /> */}
+        {/** status/errorhandling fetching sim info */}
         
-        {loading && <CircularProgress />}
-        {error && 
-            <div className="status-error">
-                <Alert severity="error">{error}</Alert>
+            {loading && <CircularProgress />}
+            {error && 
+                <div className="status-error">
+                    <Alert severity="error">{error}</Alert>
+                </div>
+            }
+            {data && data.status === "completed" && (
+                <div className="status-success">
+                    <Alert severity="success">Status der Simulation: {data.status}. yay!</Alert>
+                </div>
+            )}
+            {data && data.status !== "completed" && (
+                <div className="status-failed">
+                    <Alert severity="warning">Status der Simulation: {data.status}</Alert>
+                </div>
+            )}
             </div>
-        }
-        {data && data.status === "completed" && (
-            <div className="status-success">
-                <Alert severity="success">Status der Simulation: {data.status}. yay!</Alert>
-            </div>
-        )}
-        {data && data.status !== "completed" && (
-            <div className="status-failed">
-                <Alert severity="warning">Status der Simulation: {data.status}. yuck..</Alert>
-            </div>
-        )}
+        </form>
+
+
+
+        {/** status/errorhandling fetching sim artifacts */}
 
         {artifactLoading && <CircularProgress />}
+
+        {artifactError && 
+            <div className="status-error">
+                <Alert severity="error">{artifactError}</Alert>
+            </div>
+        }
+
         {artifacts.length > 0 && ( //überhaupt was da? wenn ja (> 0), dann gib aus
+        <div className="artifacts">
+            <h2>Plots:</h2>
             <div className="artifact-container">
-                <h2>Plots:</h2>
                 {artifacts.map((artifact) => (
                     <div key={artifact.filename} className="artifact-item-plot">
                         {artifact.type === "plot" &&(
@@ -232,10 +298,54 @@ export default function Result() {
                     </div> 
                 ))}
             </div>
+        </div>
         )}
-        {artifacts.length > 0 && (
-            <div className="artifact-container">
-                <h2>Rohdaten:</h2>
+
+        {/** status/errorhandling fetching sim config (referenzwerte aus input params) */}
+
+        {configLoading && <CircularProgress />}
+
+        {configError && 
+            <div className="status-error">
+                <Alert severity="error">{configError}</Alert>
+            </div>
+        }
+
+        {config && (
+            <div className="config">
+                <h2>Parameter:</h2>
+                <div className="config-container">
+                    <div className="config-general">
+                        <h3>Allgemein</h3>
+                        <p><strong>ID:</strong> {simInfo?.id}</p>
+                        <p><strong>Seed:</strong> {simInfo?.seed}</p>
+                        <p><strong>Startdatum:</strong> {simInfo?.startdate}</p>
+                        <p><strong>Enddatum:</strong> {simInfo?.enddate}</p>
+                    </div>
+                    <div className="config-population">
+                        <h3>Population</h3>
+                        <p><strong>Bevölkerungszahl:</strong> {popInfo?.n}</p>
+                        <p><i>durchschn. Haushaltsgröße: {popInfo?.avg_household_size}</i></p>
+                        <p><i>durchschn. Bürogröße: {popInfo?.avg_office_size}</i></p>
+                        <p><i>durchschn. Schulgröße: {popInfo?.avg_school_size}</i> </p>
+                    </div>
+                    <div className="config-pathogen">
+                        <h3>Infektion</h3>
+                        <p><strong>Pathogen: </strong>{pathogenTypeInfo?.pathogen}</p>
+                        <p><strong>Übertragungsrate: </strong>{pathogenInfo?.transmission_function?.parameters?.transmission_rate}</p>
+                        <p></p>
+                    </div>
+                    <div className="config-interventions">
+                        <h3>Interventionen</h3>
+                        {interventionInfo.map((i: any, index: number) => (
+                    <div key={index}>
+                        <p><strong>Typ:</strong> {i.type}</p>
+                        <p><strong>Trigger:</strong> {i.trigger}</p>
+                        <p><strong>Dauer:</strong> {i.duration} Tage</p>
+                    </div>
+                ))}
+                    </div>
+                </div>
             </div>
         )}
         
