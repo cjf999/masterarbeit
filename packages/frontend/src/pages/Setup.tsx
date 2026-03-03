@@ -92,7 +92,6 @@ function Setup(){
     }
 
     //TODO: default-werte in inputfelder geben 
-    //TODO: tooltip für alle parameter, interventionen disabled + aus payload entfernen
     //TODO: errorhandling als html (z.B. wenn api call fehlschlägt, oder ungültige parameter eingegeben wurden)
     //TODO: negative/ungültige eingaben abfangen
     return(

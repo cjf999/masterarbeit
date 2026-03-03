@@ -350,6 +350,9 @@ export default function Result() {
                 </div>
             </div>
             )} 
+        {artifacts && (   
+        <div className="csv">
+        <h2>Downloads:</h2>
         <div className="csv-container">
         {artifacts
         .filter(a => a.type === "csv") //sonst mappen wir über 4 elemente und kriegen leere divs zurück
@@ -372,6 +375,8 @@ export default function Result() {
             </div>
         ))}
         </div>
+        </div>
+        )} 
         </div>         
         <Link className="return-link" to={"/"}>Zurück zur Startseite</Link>
         <Footer />
