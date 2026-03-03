@@ -104,13 +104,19 @@ p {
   bottom: 0;
   left: 0;
   width: 100%;
-  height: 80px;
+  height: 60px;
   justify-content: center;
   align-items: center;
 }
 
+#uzl_svg{
+  max-width: 40px;
+  max-height: 45px;
+}
+
 .footer-content{
   display: flex;
+  align-items: center;
   gap: 35px;
 }
 
@@ -311,6 +317,7 @@ p {
 
 .fetch-container{
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   background-color: #F9F9F9;
@@ -332,6 +339,20 @@ p {
   padding: 30px;
   background-color: #F9F9F9;
   border-radius: 10px;
+}
+
+.artifact-container-compare{
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  padding-left: 10px;
+  background-color: #F9F9F9;
+  border-radius: 10px;
+}
+
+.artifact-img-compare{
+  width: 450px;
+  height: auto;
 }
 
 .artifact-item-plot{
@@ -376,6 +397,47 @@ p {
   border-radius: 10px;
 }
 
+/* br */
+
+.compare-wrapper{
+  display: flex;
+  flex-direction: row-reverse;
+  max-width: 50vw;
+  background-color: #F9F9F9;
+  padding: 20px;
+}
+
+.config-container-compare{
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  border-radius: 10px;
+}
+
+.config-general-compare{
+  background-color: #E1E4E8;
+  padding: 15px;
+  border-radius: 10px;
+}
+
+.config-population-compare{
+  background-color: #E1E4E8;
+  padding: 15px;
+  border-radius: 10px;  
+}
+
+.config-pathogen-compare{
+  background-color: #E1E4E8;
+  padding: 15px;
+  border-radius: 10px;  
+}
+
+.config-interventions-compare{
+  background-color: #E1E4E8;
+  padding: 15px;
+  border-radius: 10px;
+}
+
 .csv-container{
   background-color: #F9F9F9;
   display: flex;
@@ -397,6 +459,21 @@ p {
 */
 
 /* compare view */
+
+.view-left{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-self: flex-start;
+}
+
+.view-right{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-self: flex-start;
+}
+
 .compare-container{
   display: flex;
   flex-direction: column;
@@ -409,8 +486,8 @@ p {
   display: flex;
   flex-direction: row;
   justify-content: center;
-  gap: 150px;
-  padding-top: 80px;
+  gap: 20px;
+  padding-top: 20px;
 }
 
 /* history view */
