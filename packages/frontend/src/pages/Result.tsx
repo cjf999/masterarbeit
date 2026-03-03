@@ -13,7 +13,6 @@ export default function Result() {
 
     //data für fetch
     const [data, setData] = useState<SimulationData | null>(null);
-
     const [simulationId, setSimulationId] = useState(""); 
     const [inputValue, setInputValue] = useState(""); //damit nicht bei jeder zeicheineingabe simId geaändert und dadurch fetchData gecalled wird
     
@@ -41,8 +40,9 @@ export default function Result() {
         size: number;
         createdAt: string;
     }
+    
 
-    //konkrete ergebnisse 
+    //konkrete ergebnisse & CSV-Dateien
     const [artifactLoading, setArtifactLoading] = useState(false);
     const [artifacts, setArtifacts] = useState<Artifact[]>([]);
     const [artifactError, setArtifactError] = useState<string | null>(null);
@@ -65,7 +65,6 @@ export default function Result() {
 
     ergänzen, um batch runs anzuzeigen
     */ 
-
 
     //quellen für simulationId
     const { state } = useLocation(); 
@@ -165,6 +164,7 @@ export default function Result() {
         }
         finally{
             setArtifactLoading(false);
+            console.log("fetchArtifacts called ALARM ALARM");
         }
     }
 
@@ -285,7 +285,9 @@ export default function Result() {
         <div className="artifacts">
             <h2>Plots:</h2>
             <div className="artifact-container">
-                {artifacts.map((artifact) => (
+                {artifacts
+                .filter(a => a.type === "plot") //sonst mappen wir über 4 elemente und kriegen leere divs zurück
+                .map((artifact) => (
                     <div key={artifact.filename} className="artifact-item-plot">
                         {artifact.type === "plot" &&(
                             <img 
@@ -338,18 +340,39 @@ export default function Result() {
                     <div className="config-interventions">
                         <h3>Interventionen</h3>
                         {interventionInfo.map((i: any, index: number) => (
-                    <div key={index}>
-                        <p><strong>Typ:</strong> {i.type}</p>
-                        <p><strong>Trigger:</strong> {i.trigger}</p>
-                        <p><strong>Dauer:</strong> {i.duration} Tage</p>
-                    </div>
-                ))}
+                        <div key={index}>
+                            <p><strong>Typ: </strong>{i.type}</p>
+                            <p><strong>Ausgelöst bei: </strong>{i.trigger}</p>
+                            <p><strong>Dauer: </strong>{i.duration} Tage</p>
+                        </div>
+                         ))}
                     </div>
                 </div>
             </div>
-        )}
-        
+            )} 
+        <div className="csv-container">
+        {artifacts
+        .filter(a => a.type === "csv") //sonst mappen wir über 4 elemente und kriegen leere divs zurück
+        .map ((artifact) => (
+            <div key={artifact.filename} className="csv-download-container">
+                {artifact.type === "csv" && (
+                    <div className="csv-download">
+                        <p>{artifact.filename}</p>
+
+                        {" | "}
+
+                        <a
+                            href={`https://gems.hciuse.sh/simulations/${simulationId}/artifacts/${artifact.filename}`}
+                            download
+                        >
+                            Daten herunterladen
+                        </a>
+                    </div>
+                )}
+            </div>
+        ))}
         </div>
+        </div>         
         <Link className="return-link" to={"/"}>Zurück zur Startseite</Link>
         <Footer />
         </>
