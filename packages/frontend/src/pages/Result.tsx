@@ -153,7 +153,7 @@ export default function Result() {
 
             /**
              * dieses mumbo jumbo replace() muss leider sein, weil sonst versucht wird, einen float-value auf ein integer-array zu parsen. 
-             * ggfs. TOML-config anpassen, sodass ein array wie zb "[1, 0.0]" als [1.0, 0.0]
+             * ggfs. TOML-config anpassen, sodass ein array/interval/übergabewert wie zb "[1, 0.0]" als [1.0, 0.0]
              * der parser liest das erste element im array und macht daran fest, von welchem typ das array ist.
              * im obigen fall 1 wäre ein int, aber 0.x ein float. alle elemente müssen den selben typ haben
              * */
@@ -342,8 +342,9 @@ export default function Result() {
                         <h3>Infektion</h3>
                         <p><strong>Pathogen: </strong>{pathogenTypeInfo?.pathogen}</p>
                         <p><strong>Übertragungsrate: </strong>{pathogenInfo?.transmission_function?.parameters?.transmission_rate}</p>
-                        {pathogenInfo?.transmission_function?.parameters?.transmission_rate > 0.4 && (
-                            <p style={{color: "red"}}>Hohe Ansteckungsgefahr!</p>
+                        {pathogenInfo?.transmission_function?.parameters?.transmission_rate > 0.1 && (
+                            <Alert severity="error">Hohe Ansteckungsgefahr!</Alert>
+                            
                         )}
                     </div>
                     <div className="config-interventions">

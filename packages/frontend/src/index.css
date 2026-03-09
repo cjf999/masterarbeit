@@ -101,12 +101,12 @@ p {
 /* footer */
 #impressum{
   text-decoration: none;
-  color: #1F2933;  
+  color: #12181e;  
 }
 
 #datenschutz{
   text-decoration: none;
-  color: #1F2933;
+  color: #12181e;
 }
 
 .footer{
@@ -216,10 +216,12 @@ p {
   display: flex;
   flex-direction: row;
   justify-content: space-around;
-  padding-left: 50px;
-  padding-right: 50px;
-  padding-bottom: 50px;
   gap: 75px;
+}
+
+.error-container{
+  padding-top: 20px;
+  max-width: 180px;
 }
 
 .param{
