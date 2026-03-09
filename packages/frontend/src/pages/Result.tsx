@@ -269,7 +269,7 @@ export default function Result() {
             }
             {data && data.status === "completed" && (
                 <div className="status-success">
-                    <Alert severity="success">Status der Simulation: {data.status}. yay!</Alert>
+                    <Alert severity="success">Status der Simulation: {data.status}</Alert>
                 </div>
             )}
             {data && data.status !== "completed" && (
@@ -342,7 +342,9 @@ export default function Result() {
                         <h3>Infektion</h3>
                         <p><strong>Pathogen: </strong>{pathogenTypeInfo?.pathogen}</p>
                         <p><strong>Übertragungsrate: </strong>{pathogenInfo?.transmission_function?.parameters?.transmission_rate}</p>
-                        <p></p>
+                        {pathogenInfo?.transmission_function?.parameters?.transmission_rate > 0.4 && (
+                            <p style={{color: "red"}}>Hohe Ansteckungsgefahr!</p>
+                        )}
                     </div>
                     <div className="config-interventions">
                         <h3>Interventionen</h3>
@@ -358,9 +360,10 @@ export default function Result() {
             </div>
             )} 
 
-        {artifacts && (   
+        {artifacts.length > 0 && (   
         <div className="csv">
             <h2>Downloads:</h2>
+            <p><i>Hier können Sie die Rohdaten der Plots herunterladen</i></p>
             <div className="csv-container">
             {artifacts
             .filter(a => a.type === "csv") //sonst mappen wir über 4 elemente und kriegen leere divs zurück

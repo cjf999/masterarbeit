@@ -95,10 +95,20 @@ p {
 .return-link{
   position: fixed;
   bottom: 100px;
-  left: 50px;
+  left: 20px;
 }
 
 /* footer */
+#impressum{
+  text-decoration: none;
+  color: #1F2933;  
+}
+
+#datenschutz{
+  text-decoration: none;
+  color: #1F2933;
+}
+
 .footer{
   display: flex;
   position: fixed;

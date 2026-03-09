@@ -3,6 +3,7 @@ import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
 //import { useEffect, useState } from "react";
 import { Table, TableHead, TableBody, TableContainer, TableRow, TableCell } from "@mui/material";
+import { Link } from "react-router-dom";
 
 //import Routes
 
@@ -73,6 +74,7 @@ const History = () => {
             </TableContainer>
         </div>
         </div>
+        <Link className="return-link" to={"/"}>Zurück zur Startseite</Link>
         <Footer />
     </>
     )

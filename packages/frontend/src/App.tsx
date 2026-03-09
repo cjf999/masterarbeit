@@ -1,5 +1,5 @@
 //import dependencies 
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import './App.css'
 //import other components
 import Navbar from './components/Navbar';
@@ -7,11 +7,7 @@ import Footer from './components/Footer';
 
 function App() {
  
-  const location = useLocation();
   const navigate = useNavigate();
-  const clickHandler = () => {
-    console.log(location.pathname);
-  }  
 
   return (
     <>
@@ -39,7 +35,6 @@ function App() {
         </div>
       </div>
     </div>
-    <button onClick={clickHandler}>Gib aktuelle url aus</button>
     </div>
     <Footer />
     </>

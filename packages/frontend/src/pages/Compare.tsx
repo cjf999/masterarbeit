@@ -30,8 +30,8 @@ function Compare(){
 
             <br/>
 
-            <div style={{textAlign: "center", marginTop: "50px"}}>
-                <Link to={"/"}>Zurück zur Startseite</Link>
+            <div >
+                <Link className="return-link" to={"/"}>Zurück zur Startseite</Link>
             </div>   
         </div>     
         <Footer />
