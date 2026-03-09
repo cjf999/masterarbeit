@@ -1,3 +1,4 @@
+/* root */
 :root {
   font-family: system-ui, Helvetica, Arial, sans-serif;
   line-height: 1.5;
@@ -24,6 +25,8 @@
   height: 100%;
 }
 
+/* general html styling */
+
 body {
   margin: 0;
   display: flex;
@@ -31,7 +34,6 @@ body {
   justify-content: center;
   min-width: 320px; /* brauche ich das? */
   min-height: 100vh;
-  /* overflow: hidden; */
 }
 
 h1 {
@@ -173,7 +175,7 @@ p {
   border-radius: 7px;
 }
 
-/* er macht aus <Link /> einen <a /> tag aber es passiert nix (aber auch noch nicht im scope der abfrage) */
+
 .navbar-content a.active{
   background-color: #F88500;
   border-radius: 7px;
@@ -398,7 +400,21 @@ p {
   border-radius: 10px;
 }
 
-/* br */
+.csv-container{
+  background-color: #F9F9F9;
+  display: flex;
+  gap: 50px;
+  padding: 20px;
+  margin-top: 20px;
+  border-radius: 10px;
+}
+
+.csv-download-container{
+  padding: 10px;
+  border-radius: 10px;
+}
+
+/* compare view */
 
 .compare-wrapper{
   display: flex;
@@ -439,19 +455,7 @@ p {
   border-radius: 10px;
 }
 
-.csv-container{
-  background-color: #F9F9F9;
-  display: flex;
-  gap: 50px;
-  padding: 20px;
-  margin-top: 20px;
-  border-radius: 10px;
-}
 
-.csv-download-container{
-  padding: 10px;
-  border-radius: 10px;
-}
 
 /*
 .config-future-work{

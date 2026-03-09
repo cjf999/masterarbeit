@@ -1,54 +1,11 @@
+//import dependencies
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { Alert, CircularProgress } from "@mui/material";
 import toml from "toml"
 
-
-export default function SimLoader(){
-    
-    //holt state prop aus location um {id} anhängen zu können
-    const { state } = useLocation(); 
-
-    //errorhandling
-    const [error, setError] = useState<string | null>(null);
-    const [loading, setLoading] = useState(false);
-
-    //simulationId auf leeren string setzen
-    const [simulationId, setSimulationId] = useState(""); 
-    const [inputValue, setInputValue] = useState(""); //damit nicht bei jeder zeicheineingabe simId geaändert und dadurch fetchData gecalled wird
-
-    //konkrete ergebnisse & CSV-Dateien
-    const [artifactLoading, setArtifactLoading] = useState(false);
-    const [artifacts, setArtifacts] = useState<Artifact[]>([]);
-    const [artifactError, setArtifactError] = useState<string | null>(null);
-
-    //config (hier einfach als referenzen zum vergleich eingabe/ausgabe)
-    const [config, setConfig] = useState<any>(null);
-    const [configLoading, setConfigLoading] = useState(false);
-    const [configError, setConfigError] = useState<string | null>(null);
-
-    //output vars für config referenzen
-    const simInfo = config?.Simulation;
-    const popInfo = config?.Population;
-    const pathogenTypeInfo = config?.Simulation?.StartCondition;
-    const pathogenInfo = config?.Pathogens?.Covid19;
-    const interventionInfo = config?.interventions;
-
-    type Artifact = {
-        type: "plot" | "csv";
-        mime: string;
-        filename: string;
-        size: number;
-        createdAt: string;
-    }    
-
-    //checken, ob eingabe mit "sim_" beginnt
-    const isValidInput = (simId: string) => {
-        const pattern = /^sim_\d+$/;
-        return pattern.test(simId);
-    }    
-
-    type SimulationData = {
+//types
+type SimulationData = {
         simulationId: string;
         status: string;
         startTime: string;
@@ -57,18 +14,63 @@ export default function SimLoader(){
         resultFiles: string[];
         plotFiles: string[];
         errorMessage: string;
-    }    
+}
+
+type Artifact = {
+    type: "plot" | "csv";
+    mime: string;
+    filename: string;
+    size: number;
+    createdAt: string;
+}
+
+//checken, ob eingabe mit "sim_" beginnt
+const isValidInput = (simId: string) => {
+    const pattern = /^sim_\d+$/;
+    return pattern.test(simId);
+} 
+
+export default function SimLoader(){
+    
+    /* states */
+    //errorhandling
+    const [error, setError] = useState<string | null>(null);
+    const [loading, setLoading] = useState(false);
+
+    //data für fetch von sim Daten
     const [data, setData] = useState<SimulationData | null>(null);
+    const [simulationId, setSimulationId] = useState(""); 
+    const [inputValue, setInputValue] = useState(""); //damit nicht bei jeder zeicheineingabe simId geändert und dadurch fetchData gecalled wird
 
-    //wenn sich sim id ändert, dann neue daten mit neuer sim id fetchen
-    useEffect(() => {
-        fetchData(simulationId);
-    }, [simulationId])
+    //konkrete ergebnisse (Plots)
+    const [artifactLoading, setArtifactLoading] = useState(false);
+    const [artifacts, setArtifacts] = useState<Artifact[]>([]);
+    const [artifactError, setArtifactError] = useState<string | null>(null);
 
-    //wenn sich state ändert, dann setze simulationId auf state.simId (sofern da)
-    useEffect(() => {
-        setSimulationId(state?.simId || "");
-    }, [state])
+    //config (hier einfach als sim-parameter-referenzen zum vergleich eingabe/ausgabe)
+    const [config, setConfig] = useState<any>(null);
+    const [configLoading, setConfigLoading] = useState(false);
+    const [configError, setConfigError] = useState<string | null>(null);
+
+    /* routing hooks */
+    //holt state prop aus location um {id} anhängen zu können
+    const { state } = useLocation(); 
+
+    //output vars für config referenzen
+    const simInfo = config?.Simulation;
+    const popInfo = config?.Population;
+    const pathogenTypeInfo = config?.Simulation?.StartCondition;
+    const pathogenInfo = config?.Pathogens?.Covid19;
+    const interventionInfo = config?.interventions;
+    /*
+    future work: man könnte 
+    const batchInfo = config?.batch;
+    ergänzen, um batch runs anzuzeigen
+    */ 
+
+    /* api calls */
+   
+
 
     //api call
     const fetchData = async (simId: string | null) => {
@@ -159,21 +161,8 @@ export default function SimLoader(){
             console.log("fetchConfig called ALARM ALARM");
         }
     }
-
-    useEffect(() => {
-
-        if(data && data.status === "completed"){
-            fetchArtifacts(data.simulationId) //gucken auf data und nicht auf eingabe?
-            fetchConfig(data.simulationId)
-        }
-    }, [data])
-
-    //debugging
-    useEffect(() => {
-        console.log('data:', data);
-    }, [data])
-
-    //submithandler 
+    
+    /* submit handler */
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         setSimulationId(inputValue); 
@@ -181,8 +170,44 @@ export default function SimLoader(){
         const simId = data.get("id") as string;
         console.log('looking for simId', simId);
         setSimulationId(simId); // !!Wichtig!! hier wird state geändert und fetchData erneut aufgerufen
-    }   
+    } 
 
+    /* useEffects */
+    //wenn sich sim id ändert, dann neue daten mit neuer sim id fetchen
+    useEffect(() => {
+        fetchData(simulationId);
+    }, [simulationId])
+
+    //wenn sich state ändert, dann setze simulationId auf state.simId (sofern da)
+    useEffect(() => {
+        setSimulationId(state?.simId || "");
+    }, [state])
+
+    useEffect(() => {
+        if(data && data.status === "completed"){
+            fetchArtifacts(data.simulationId) //gucken auf data und nicht auf eingabe?
+            fetchConfig(data.simulationId)
+        }
+    }, [data])
+
+    /* debug */
+    useEffect(() => {
+        console.log('data:', data);
+    }, [data])
+
+    //debug artifacts
+    useEffect(() => {
+        console.log('artifactData:', artifacts);
+        console.log("artifactLink", `https://gems.hciuse.sh/simulations/${simulationId}/artifacts/`)
+    }, [artifacts])
+
+    //debug config
+    useEffect(() => {
+        console.log('configData:', config);
+        console.log("configLink", `https://gems.hciuse.sh/simulations/${simulationId}/config/`)
+    }, [config])    
+
+  
     return(
         <>
         <div className="simloader-container">

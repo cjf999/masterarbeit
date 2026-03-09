@@ -1,28 +1,20 @@
+/**
+ * Future Work: Auslagern von Artifacts & Config-Daten
+ * -> seperation of concerns + wartbarkeit
+ */
+
+//dependencies 
 import toml from "toml";
 import { useEffect, useState } from "react";
-import Footer from "../components/Footer";
-import Navbar from "../components/Navbar";
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import { Alert, CircularProgress } from "@mui/material";
 
-export default function Result() {
+//components
+import Footer from "../components/Footer";
+import Navbar from "../components/Navbar";
 
-    //errorhandling
-    const [error, setError] = useState<string | null>(null);
-    const [loading, setLoading] = useState(false);
-
-    //data für fetch
-    const [data, setData] = useState<SimulationData | null>(null);
-    const [simulationId, setSimulationId] = useState(""); 
-    const [inputValue, setInputValue] = useState(""); //damit nicht bei jeder zeicheineingabe simId geaändert und dadurch fetchData gecalled wird
-    
-    //checken, ob input mit "sim_" beginnt
-    const isValidInput = (simId: string) => {
-        const pattern = /^sim_\d+$/;
-        return pattern.test(simId);
-    }
-
-    type SimulationData = {
+//types
+type SimulationData = {
         simulationId: string;
         status: string;
         startTime: string;
@@ -31,26 +23,51 @@ export default function Result() {
         resultFiles: string[];
         plotFiles: string[];
         errorMessage: string;
-    }
+}
 
-    type Artifact = {
-        type: "plot" | "csv";
-        mime: string;
-        filename: string;
-        size: number;
-        createdAt: string;
-    }
+type Artifact = {
+    type: "plot" | "csv";
+    mime: string;
+    filename: string;
+    size: number;
+    createdAt: string;
+}
+
+//helperfunction: checken, ob input mit "sim_" beginnt
+const isValidInput = (simId: string) => {
+    const pattern = /^sim_\d+$/;
+    return pattern.test(simId);
+}
+
+export default function Result() {
+
+    /* states */
+    //errorhandling
+    const [error, setError] = useState<string | null>(null);
+    const [loading, setLoading] = useState(false);
+
+    //data für fetch von sim Daten
+    const [data, setData] = useState<SimulationData | null>(null);
+    const [simulationId, setSimulationId] = useState(""); 
+    const [inputValue, setInputValue] = useState(""); //damit nicht bei jeder zeicheineingabe simId geaändert und dadurch fetchData gecalled wird
     
-
-    //konkrete ergebnisse & CSV-Dateien
+    //konkrete ergebnisse (Plots  & CSV-Dateien)
     const [artifactLoading, setArtifactLoading] = useState(false);
     const [artifacts, setArtifacts] = useState<Artifact[]>([]);
     const [artifactError, setArtifactError] = useState<string | null>(null);
 
-    //config (hier einfach als referenzen zum vergleich eingabe/ausgabe)
+    //config (hier einfach als sim-parameter-referenzen zum vergleich eingabe/ausgabe)
     const [config, setConfig] = useState<any>(null);
     const [configLoading, setConfigLoading] = useState(false);
     const [configError, setConfigError] = useState<string | null>(null);
+
+    /* routing hooks */
+    //quellen für simulationId
+    const { state } = useLocation(); 
+    const { simId } = useParams<{simId: string}>();    
+
+    //navigieren
+    const navigate = useNavigate();
 
     //output vars für config referenzen
     const simInfo = config?.Simulation;
@@ -60,36 +77,11 @@ export default function Result() {
     const interventionInfo = config?.interventions;
     /*
     future work: man könnte 
-
     const batchInfo = config?.batch;
-
     ergänzen, um batch runs anzuzeigen
     */ 
 
-    //quellen für simulationId
-    const { state } = useLocation(); 
-    const { simId } = useParams<{simId: string}>();    
-
-    //navigieren
-    const navigate = useNavigate();
-
-    //setze simulationId auf simId (egal ob von eingabe oder durch übergabe!) und update bei änderung
-    useEffect(() => {
-        if(simId){
-            setSimulationId(simId);
-            setInputValue(simId);
-        }
-        else if(state?.simId){
-            setSimulationId(state.simId)
-            setInputValue(state.simId)
-        }
-    }, [simId, state]);
-
-    //wenn sich simulationId ändert, dann neue daten mit neuer simulationId fetchen
-    useEffect(() => {
-        fetchData(simulationId);
-    }, [simulationId])
-
+    /* api calls */
     //api call für simdaten
     const fetchData = async (simId: string | null) => {
         if (!simId) return;
@@ -120,29 +112,6 @@ export default function Result() {
         }
     }
 
-    //wenn data sich ändert, dann loggen (debug)
-    useEffect(() => {
-        console.log('data:', data);
-    }, [data])
-
-    //submit handler 
-    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
-
-        if(!isValidInput(inputValue)){
-            setError("Ungültige SimulationID! Das Format muss sim_123456789 sein.")
-            return;
-        }
-
-        navigate(`/result/${inputValue}`);
-
-        // setSimulationId(inputValue); 
-        // const data = new FormData(event.currentTarget);
-        // const simId = data.get("id") as string;
-        console.log('looking for simId', simId);
-        // setSimulationId(simId); 
-    }
-
     //api call für plots etc
     const fetchArtifacts = async (simId: string) => {
         
@@ -168,7 +137,7 @@ export default function Result() {
         }
     }
 
-    //api call für config (input params etc)
+    //api call für config (input params)
     const fetchConfig = async (simId: string) => {
 
         setConfigLoading(true);
@@ -200,34 +169,76 @@ export default function Result() {
         finally{
             setConfigLoading(false);
         }
-    }
+    }    
 
+    /* useEffects */
+    //setze simulationId auf simId (egal ob von eingabe oder durch übergabe!) und update bei änderung
     useEffect(() => {
+        if(simId){
+            setSimulationId(simId);
+            setInputValue(simId);
+        }
+        else if(state?.simId){
+            setSimulationId(state.simId)
+            setInputValue(state.simId)
+        }
+    }, [simId, state]);
 
+    //wenn sich simulationId ändert, dann neue daten mit neuer simulationId fetchen
+    useEffect(() => {
+        fetchData(simulationId);
+    }, [simulationId])
+
+   //wenn data da und sim erfolgreich, dann hole restliche daten 
+   useEffect(() => {
         if(data && data.status === "completed"){
             fetchArtifacts(data.simulationId) //gucken auf data und nicht auf eingabe?
             fetchConfig(data.simulationId)
         }
     }, [data])
 
+    /* submit handler */
+    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+
+        if(!isValidInput(inputValue)){
+            setError("Ungültige SimulationID! Das Format muss sim_123456789 sein.")
+            return;
+        }
+
+        navigate(`/result/${inputValue}`);
+
+        // setSimulationId(inputValue); 
+        // const data = new FormData(event.currentTarget);
+        // const simId = data.get("id") as string;
+        console.log('looking for simId', simId);
+        // setSimulationId(simId); 
+    }
+
+    /* debug */
+    //wenn data sich ändert, dann loggen (debug)
+    useEffect(() => {
+        console.log('data:', data);
+    }, [data])
+
     //debug artifacts
     useEffect(() => {
         console.log('artifactData:', artifacts);
         console.log("artifactLink", `https://gems.hciuse.sh/simulations/${simulationId}/artifacts/`)
-    }, [data])
+    }, [artifacts])
 
     //debug config
     useEffect(() => {
         console.log('configData:', config);
         console.log("configLink", `https://gems.hciuse.sh/simulations/${simulationId}/config/`)
-    }, [data])
+    }, [config])
+
 
     return(
         <>
         <Navbar />
         <div className="result-container">
         <h1>Result View</h1>
-
 
         <form onSubmit={handleSubmit} className="result-form" > 
             <p style={{textAlign: "center"}}>Geben Sie hier die ID der Simulation ein, um die Ergebnisse einzusehen:</p>
@@ -248,8 +259,8 @@ export default function Result() {
             >
                 Ergebnisse laden
             </button>
-        {/** status/errorhandling fetching sim info */}
-        
+
+            {/** status/errorhandling fetching sim info */}
             {loading && <CircularProgress />}
             {error && 
                 <div className="status-error">
@@ -269,10 +280,7 @@ export default function Result() {
             </div>
         </form>
 
-
-
         {/** status/errorhandling fetching sim artifacts */}
-
         {artifactLoading && <CircularProgress />}
 
         {artifactError && 
@@ -304,7 +312,6 @@ export default function Result() {
         )}
 
         {/** status/errorhandling fetching sim config (referenzwerte aus input params) */}
-
         {configLoading && <CircularProgress />}
 
         {configError && 
@@ -350,31 +357,32 @@ export default function Result() {
                 </div>
             </div>
             )} 
+
         {artifacts && (   
         <div className="csv">
-        <h2>Downloads:</h2>
-        <div className="csv-container">
-        {artifacts
-        .filter(a => a.type === "csv") //sonst mappen wir über 4 elemente und kriegen leere divs zurück
-        .map ((artifact) => (
-            <div key={artifact.filename} className="csv-download-container">
-                {artifact.type === "csv" && (
-                    <div className="csv-download">
-                        <p>{artifact.filename}</p>
+            <h2>Downloads:</h2>
+            <div className="csv-container">
+            {artifacts
+            .filter(a => a.type === "csv") //sonst mappen wir über 4 elemente und kriegen leere divs zurück
+            .map ((artifact) => (
+                <div key={artifact.filename} className="csv-download-container">
+                    {artifact.type === "csv" && (
+                        <div className="csv-download">
+                            <p>{artifact.filename}</p>
 
-                        {" | "}
+                            {" | "}
 
-                        <a
-                            href={`https://gems.hciuse.sh/simulations/${simulationId}/artifacts/${artifact.filename}`}
-                            download
-                        >
-                            Daten herunterladen
-                        </a>
-                    </div>
-                )}
+                            <a
+                                href={`https://gems.hciuse.sh/simulations/${simulationId}/artifacts/${artifact.filename}`}
+                                download
+                            >
+                                Daten herunterladen
+                            </a>
+                        </div>
+                    )}
+                </div>
+            ))}
             </div>
-        ))}
-        </div>
         </div>
         )} 
         </div>         
