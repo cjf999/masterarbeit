@@ -46,6 +46,9 @@ export default function Result() {
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
 
+    //polling
+    const [polling, setPolling] = useState(false);
+
     //data für fetch von sim Daten
     const [data, setData] = useState<SimulationData | null>(null);
     const [simulationId, setSimulationId] = useState(""); 
@@ -172,6 +175,35 @@ export default function Result() {
     }    
 
     /* useEffects */
+
+    //polling für regelmäßige requests bis ergebnisse fertig
+    useEffect(() => {
+        if (!polling || !simulationId) return;
+
+        const interval = setInterval(async () => {
+            try {
+                const res = await fetch(`https://gems.hciuse.sh/simulations/${simulationId}`);
+                if (!res.ok) throw new Error("Fehler beim Abrufen der Daten");
+
+                const result = await res.json();
+                setData(result);
+
+                // wenn Simulation fertig dann polling stoppen
+                if (result.status !== "running") {
+                    clearInterval(interval);
+                    setPolling(false);
+                }
+
+            } catch (err) {
+                console.error(err);
+            }
+
+        }, 3000); // alle 3 Sekunden
+
+        return () => clearInterval(interval);
+
+    }, [polling, simulationId]);    
+
     //setze simulationId auf simId (egal ob von eingabe oder durch übergabe!) und update bei änderung
     useEffect(() => {
         if(simId){
@@ -208,7 +240,10 @@ export default function Result() {
 
         navigate(`/result/${inputValue}`);
 
-        // setSimulationId(inputValue); 
+        setSimulationId(inputValue);
+
+        
+        setPolling(true); // Polling starten
         // const data = new FormData(event.currentTarget);
         // const simId = data.get("id") as string;
         console.log('looking for simId', simId);
@@ -256,6 +291,7 @@ export default function Result() {
             <button 
             type="submit" 
             className="button-container fetch-button" 
+
             >
                 Ergebnisse laden
             </button>
@@ -342,7 +378,7 @@ export default function Result() {
                         <h3>Infektion</h3>
                         <p><strong>Pathogen: </strong>{pathogenTypeInfo?.pathogen}</p>
                         <p><strong>Übertragungsrate: </strong>{pathogenInfo?.transmission_function?.parameters?.transmission_rate}</p>
-                        {pathogenInfo?.transmission_function?.parameters?.transmission_rate > 0.1 && (
+                        {pathogenInfo?.transmission_function?.parameters?.transmission_rate > 0.5 && (
                             <Alert severity="error">Hohe Ansteckungsgefahr!</Alert>
                             
                         )}

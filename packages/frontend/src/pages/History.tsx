@@ -26,9 +26,9 @@ const History = () => {
     }
 
     const rows = [
-        createData("sim_1771331080051", 420, 10000, 4562, 1, 0.3, 0.8, 0.45, "01.01.2025", "01.07.2025"),
+        createData("sim_1771331080051", 420, 10000, 4562, 2, 0.3, 0.8, 0.45, "01.01.2025", "01.07.2025"),
         createData("sim_0000000000000", 201, 10000, 2000, 1, 0.2, 0.7, 0.46, "01.01.2025", "01.07.2025"),
-        createData("sim_0000000000001", 202, 11000, 2000, 1, 0.2, 0.6, 0.47, "01.01.2025", "01.07.2025")
+        createData("sim_0000000000001", 202, 11000, 2000, 5, 0.2, 0.6, 0.47, "01.01.2025", "01.07.2025")
     ]
 
     return(
@@ -48,7 +48,7 @@ const History = () => {
                     <TableCell>Infections</TableCell>
                     <TableCell>Household Size</TableCell>
                     <TableCell>Transmission Rate</TableCell>
-                    <TableCell>Reproduction Number</TableCell>
+                    <TableCell>R(0)</TableCell>
                     <TableCell>Attack Rate</TableCell>
                     <TableCell>Start Date</TableCell>
                     <TableCell>End Date</TableCell>
@@ -73,8 +73,9 @@ const History = () => {
             </Table>
             </TableContainer>
         </div>
-        </div>
+        <p><i>Dies sind Mock-Daten und bieten keine Funktionalität</i></p>
         <Link className="return-link" to={"/"}>Zurück zur Startseite</Link>
+        </div>
         <Footer />
     </>
     )

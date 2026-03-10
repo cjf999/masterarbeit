@@ -1,6 +1,5 @@
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
-import { Link } from "react-router-dom";
 import SimLoader from "../components/SimLoader";
 
 function Compare(){
@@ -27,12 +26,7 @@ function Compare(){
                     </div>                   
                 </div>
             </div>
-
             <br/>
-
-            <div >
-                <Link className="return-link" to={"/"}>Zurück zur Startseite</Link>
-            </div>   
         </div>     
         <Footer />
         </>
