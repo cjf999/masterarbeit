@@ -1,0 +1,18 @@
+services:
+  gems-interface-ui:
+    container_name: gems-interface-ui
+    restart: always
+    build:
+      context: ./packages/frontend
+    networks:
+      proxy:
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:80"]
+      interval: 600s
+      timeout: 5s
+      retries: 3
+      start_period: 15s
+
+networks:
+  proxy:
+    external: true
