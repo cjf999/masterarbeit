@@ -298,6 +298,7 @@ export default function Result() {
 
             {/** status/errorhandling fetching sim info */}
             {loading && <CircularProgress />}
+            {polling && <CircularProgress />}
             {error && 
                 <div className="status-error">
                     <Alert severity="error">{error}</Alert>
