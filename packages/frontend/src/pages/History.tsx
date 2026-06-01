@@ -1,5 +1,5 @@
 //import Components
-import Footer from "../components/Footer";
+import Footer from "../components/footer";
 import Navbar from "../components/Navbar";
 //import { useEffect, useState } from "react";
 import { Table, TableHead, TableBody, TableContainer, TableRow, TableCell } from "@mui/material";

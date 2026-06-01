@@ -2,7 +2,7 @@
 import { useNavigate } from "react-router-dom";
 import "./App.css";
 //import other components
-import Footer from "./components/Footer";
+import Footer from "./components/footer";
 import Navbar from "./components/Navbar";
 // Svgs
 import compareSimSrc from "./assets/compareSim.svg";

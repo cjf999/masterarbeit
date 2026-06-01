@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
+import Footer from "../components/footer";
 import { Tooltip, Zoom, Alert } from "@mui/material";
 
 const popsizeTooltip = "Die Populationsgröße gibt an, wie viele Individuen in einer Simulation berücksichtigt werden." 

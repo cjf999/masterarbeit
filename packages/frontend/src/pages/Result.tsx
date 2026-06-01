@@ -10,7 +10,7 @@ import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import { Alert, CircularProgress } from "@mui/material";
 
 //components
-import Footer from "../components/Footer";
+import Footer from "../components/footer";
 import Navbar from "../components/Navbar";
 
 //types

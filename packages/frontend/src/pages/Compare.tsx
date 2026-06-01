@@ -1,4 +1,4 @@
-import Footer from "../components/Footer";
+import Footer from "../components/footer";
 import Navbar from "../components/Navbar";
 import SimLoader from "../components/SimLoader";
 
@@ -22,7 +22,6 @@ function Compare(){
                     <div> {/*second simloader*/}
                         <p style={{textAlign: "center"}}>Geben sie hier die ID der <b>zweiten</b> Simulation ein:</p>
                         <SimLoader />
-                    
                     </div>                   
                 </div>
             </div>

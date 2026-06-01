@@ -10,8 +10,6 @@ import NotFound from './pages/NotFound.tsx'
 import Compare from './pages/Compare.tsx'
 import Setup from './pages/Setup.tsx'
 import History from './pages/History.tsx'
-import HistoryItems from './pages/HistoryItems.tsx'
-import Success from './pages/Success.tsx'
 import Result from './pages/Result.tsx'
 // import ResultItems from './pages/ResultItems.tsx'
 
@@ -21,8 +19,6 @@ const router = createBrowserRouter([
   {path: "/compare", element: <Compare />},
   {path: "/setup", element: <Setup />},
   {path: "/history", element: <History />},
-  {path: "/history/:id", element: <HistoryItems />},
-  {path: "/success", element: <Success />},
   {path: "/result", element: <Result />},
   {path: "/result/:simId", element: <Result />},
   
